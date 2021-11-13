@@ -8,7 +8,7 @@ Our platforms empower them to capture images that were once out of reach. Our fl
 We do this through an unparalleled commitment to R&D, a culture of constant innovation and curiosity, and a focus on transforming complex technology into easy-to-use devices. Building on the ethos of “form follows function,” our products combine advanced technology with dynamic designs.
 
 ### `Our Facilities`
-tourist facilities means hotels, motels, motor hotels, campgrounds, or facilities established to service and maintain the vehicles and equipment of tourists and the travelling public.
+The headquarters facility is designed to house a command suite, a 250-person auditorium and squadron supporting administrative offices. Facility support spaces and facility service spaces are shared. The entrance lobby demarks the overall complex entrance. 
 
 ### `What We Offer`
 Check out DroneCraft Websites. Save Time, and Find it Here. Web, Images & Video. Information 24/7. Wiki, News & More. 100+ Million Visitors. Trusted by Millions. The Complete Overview.

@@ -22,7 +22,7 @@ async function run() {
         const database = client.db('drone_craft');
         const serviceCollection = database.collection('service');
         const usersCollection = database.collection('users');
-        const servicesDetails = database.collection('details');
+        const detailsCollection = database.collection('details');
 
         // GET API
         app.get('/service', async (req, res) => {
@@ -37,17 +37,17 @@ async function run() {
         // });
 
         // GET Single Service
-        app.get('/service/:_id', async (req, res) => {
-            const uid = req.params._id;
-            console.log('getting specific service id', _id);
+        app.get('/details/:uid', async (req, res) => {
+            const uid = req.params.uid;
+            console.log('getting specific service uid', uid);
             const query = { _id: ObjectId(uid) };
-            const service = await serviceCollection.findOne(query);
-            res.json(service);
+            const details = await detailsCollection.findOne(query);
+            res.json(details);
         })
-        // app.get('/details/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     console.log('getting specific details', id);
-        //     const query = { _id: ObjectId(id) };
+        // app.get('/details/:_id', async (req, res) => {
+        //     const uid = req.params.uid;
+        //     console.log('getting specific details', uid);
+        //     const query = { _id: uid };
         //     const details = await servicesDetails.findOne(query);
         //     res.json(details);
         // })
@@ -79,12 +79,12 @@ async function run() {
         //     res.json(result);
         // })
         // // load cart data according to user id get api
-        app.get("/details/:id", async (req, res) => {
-            const id = req.params.id;
-            const query = { uid: id };
-            const result = await servicesDetails.find(query).toArray();
-            res.json(result);
-        });
+        // app.get("/details/:uid", async (req, res) => {
+        //     const uid = req.params.uid;
+        //     const query = { _id: uid };
+        //     const result = await servicesDetails.find(query).toArray();
+        //     res.json(result);
+        // });
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
@@ -111,21 +111,12 @@ async function run() {
             const result = await usersCollection.updateOne( filter, updateDoc, options);
             res.json(result);
         })
-        app.put('/users/admin', verifyToken, async(req, res) => {
+        app.put('/users/admin', async(req, res) => {
             const user = req.body;
-            const requester = req.decodedEmail;
-            if(requester){
-                const requesterAccount = await usersCollection.findOne({email: requester});
-                if(requesterAccount.role === 'admin'){
-                    const filter = { email: user.email};
-                    const updateDoc = { $set: {role: 'admin'} };
-                    const result = await usersCollection.updateOne( filter, updateDoc);
-                    res.json(result);
-                }
-            }
-            else{
-                res.status(403).json({message: 'You do not have access to make admin'})
-            }
+                const filter = { email: user.email};
+                const updateDoc = { $set: {role: 'admin'} };
+                const result = await usersCollection.updateOne( filter, updateDoc);
+                res.json(result);
         })
 
     }
