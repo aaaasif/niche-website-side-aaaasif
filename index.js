@@ -16,6 +16,8 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+// https://arcane-savannah-78505.herokuapp.com/
+
 async function run() {
     try {
         await client.connect();
@@ -23,6 +25,8 @@ async function run() {
         const serviceCollection = database.collection('service');
         const usersCollection = database.collection('users');
         const detailsCollection = database.collection('details');
+        const reviewCollection = database.collection('review');
+
 
         // GET API
         app.get('/service', async (req, res) => {
@@ -30,61 +34,49 @@ async function run() {
             const service = await cursor.toArray();
             res.send(service);
         });
-        // app.get('/details', async (req, res) => {
-        //     const cursor = servicesDetails.find({});
-        //     const details = await cursor.toArray();
-        //     res.send(details);
-        // });
+        app.get('/details', async (req, res) => {
+            const cursor = detailsCollection.find({});
+            const details = await cursor.toArray();
+            res.send(details);
+        });
+        app.get('/review', async (req, res) => {
+            const cursor = reviewCollection.find({});
+            const review = await cursor.toArray();
+            res.send(review);
+        });
 
         // GET Single Service
-        app.get('/details/:uid', async (req, res) => {
-            const uid = req.params.uid;
-            console.log('getting specific service uid', uid);
-            const query = { _id: ObjectId(uid) };
-            const details = await detailsCollection.findOne(query);
-            res.json(details);
+        app.get('/service/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const services = await serviceCollection.findOne(query);
+            res.json(services);
         })
-        // app.get('/details/:_id', async (req, res) => {
-        //     const uid = req.params.uid;
-        //     console.log('getting specific details', uid);
-        //     const query = { _id: uid };
-        //     const details = await servicesDetails.findOne(query);
-        //     res.json(details);
-        // })
-
+        
 
         // // POST API
-        // app.post('/services', async (req, res) => {
-        //     const service = req.body;
-        //     console.log('hit the post api', service);
-
-        //     const result = await servicesCollection.insertOne(service);
-        //     console.log(result);
-        //     res.json(result)
-        // });
-        // app.post('/details', async (req, res) => {
-        //     const detail = req.body;
-        //     console.log('hit the post api', detail);
-
-        //     const result = await servicesDetails.insertOne(detail);
-        //     console.log(result);
-        //     res.json(result)
-        // });
+        app.post('/review', async (req, res) => {
+            const review = req.body;
+            // console.log('hit the post api', review);
+            const result = await reviewCollection.insertOne(review);
+            // console.log(result);
+            res.json(result)
+        });
+        app.post('/service', async (req, res) => {
+            const service = req.body
+            const result = await serviceCollection.insertOne(service);
+            console.log(result);
+            res.json(result)
+        });
 
         // // DELETE API
-        // app.delete('/details/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const result = await servicesDetails.deleteOne(query);
-        //     res.json(result);
-        // })
-        // // load cart data according to user id get api
-        // app.get("/details/:uid", async (req, res) => {
-        //     const uid = req.params.uid;
-        //     const query = { _id: uid };
-        //     const result = await servicesDetails.find(query).toArray();
-        //     res.json(result);
-        // });
+        app.delete('/details/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await serviceCollection.deleteOne(query);
+            res.json(result);
+        })
+        
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
